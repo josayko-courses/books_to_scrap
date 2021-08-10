@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from .utils import urlcat
+from .urlcat import urlcat
 
 
 def get_details(product_url):
@@ -73,5 +73,7 @@ def get_details(product_url):
                 product_details[4] = td.string
             elif (index == 5):
                 product_details[5] = td.string
+    else:
+        print("Error: cannot get data from url")
 
     return product_details

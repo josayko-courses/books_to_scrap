@@ -1,11 +1,13 @@
 from bookstoscrap.book import get_details
-from bookstoscrap.category import extract_urls
+from bookstoscrap.category import get_books_url
 import csv
+from progress.spinner import MoonSpinner
 
-product_url = "http://books.toscrape.com/catalogue/soumission_998/index.html"
 
-details = get_details(product_url)
+books_urls = get_books_url(
+    "http://books.toscrape.com/catalogue/category/books/mystery_3/index.html")
 
+# Create a csv file
 headers = [
     "product_page_url",
     "upc",
@@ -19,13 +21,14 @@ headers = [
     "image_url"
 ]
 
-# Create a csv file
-with open("data.csv", "w") as file_csv:
-    writer = csv.writer(file_csv, delimiter=",")
-    writer.writerow(headers)
-    writer.writerow(details)
+file_csv = open("data.csv", "w")
+writer = csv.writer(file_csv, delimiter=",")
+writer.writerow(headers)
 
-books_urls = extract_urls(
-    "http://books.toscrape.com/catalogue/category/books/sequential-art_5/page-1.html")
+with MoonSpinner('Processing...') as spinner:
+    for url in books_urls:
+        details = get_details(url)
+        writer.writerow(details)
+        spinner.next()
 
-print(books_urls)
+file_csv.close()
