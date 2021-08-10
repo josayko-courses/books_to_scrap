@@ -18,8 +18,8 @@ def get_details(product_url):
     [8]review_rating\n
     [9]image_url\n
     """
-    product_details = [''] * 10
     response = requests.get(product_url)
+    product_details = [''] * 10
     if (response.ok):
         soup = BeautifulSoup(response.content, "html.parser")
 

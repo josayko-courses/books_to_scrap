@@ -1,5 +1,5 @@
 from bookstoscrap.book import get_details
-from bookstoscrap.category import get_books_url
+from bookstoscrap.category import extract_urls
 import csv
 
 product_url = "http://books.toscrape.com/catalogue/soumission_998/index.html"
@@ -25,5 +25,7 @@ with open("data.csv", "w") as file_csv:
     writer.writerow(headers)
     writer.writerow(details)
 
-get_books_url(
+books_urls = extract_urls(
     "http://books.toscrape.com/catalogue/category/books/sequential-art_5/page-1.html")
+
+print(books_urls)

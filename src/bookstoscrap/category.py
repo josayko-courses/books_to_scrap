@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from .utils import urlcat
 
 
-def get_books_url(page_url):
+def extract_urls(page_url):
     response = requests.get(page_url)
     if (response.ok):
         soup = BeautifulSoup(response.content, "html.parser")
