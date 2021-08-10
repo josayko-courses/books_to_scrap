@@ -20,3 +20,7 @@ $ pip install -r requirements.txt
 ```
 
 ## How to run the program
+
+```shell
+$ python src/main.py
+```
