@@ -1,4 +1,5 @@
 import requests
+import re
 from bs4 import BeautifulSoup
 from .urlcat import urlcat
 
@@ -62,17 +63,20 @@ def get_details(product_url):
         link_url = urlcat("http://books.toscrape.com", link_str)
         product_details[9] = link_url
 
-        # Get other details
+        # Get upc, prices and availability
         tds = soup.find_all("td")
         for index, td in enumerate(tds):
             if (index == 0):
                 product_details[1] = td.string
             elif (index == 2):
-                product_details[3] = td.string
+                number = re.findall(r'[\d\.\d+]', td.string)
+                product_details[3] = float(''.join(number))
             elif (index == 3):
-                product_details[4] = td.string
+                number = re.findall(r'[\d\.\d+]', td.string)
+                product_details[4] = float(''.join(number))
             elif (index == 5):
-                product_details[5] = td.string
+                number = re.findall(r'[\d\.\d+]', td.string)
+                product_details[5] = int(''.join(number))
     else:
         print("Error: cannot get data from url")
 
