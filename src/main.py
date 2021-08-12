@@ -3,11 +3,11 @@ from bookstoscrap.category import get_categories, get_books_url
 import csv
 from progress.spinner import MoonSpinner
 
+OKGREEN = '\033[92m'
+ENDC = '\033[0m'
 
-books_urls = get_books_url(
-    "http://books.toscrape.com/catalogue/category/books/philosophy_7/index.html")
+categories = get_categories('http://books.toscrape.com')
 
-# Create a csv file
 headers = [
     "product_page_url",
     "upc",
@@ -21,18 +21,17 @@ headers = [
     "image_url"
 ]
 
-file_csv = open("data.csv", "w")
-writer = csv.writer(file_csv, delimiter=",")
-writer.writerow(headers)
-
-# with MoonSpinner('Processing...') as spinner:
-for url in books_urls:
-    details = get_details(url)
-    writer.writerow(details)
-#         spinner.next()
-
-file_csv.close()
-
-# categories = get_categories('http://books.toscrape.com')
-
-# print(books_urls)
+for category in categories:
+    if category != 'Books':
+        print("> Fetching data from " + categories[category])
+        books_urls = get_books_url(categories[category])
+        file_csv = open(category + ".csv", "w")
+        writer = csv.writer(file_csv, delimiter=",")
+        writer.writerow(headers)
+        with MoonSpinner('Processing...') as spinner:
+            for url in books_urls:
+                details = get_details(url)
+                writer.writerow(details)
+                spinner.next()
+        file_csv.close()
+        print("[" + OKGREEN + "OK" + ENDC + "] " + category + ".csv")

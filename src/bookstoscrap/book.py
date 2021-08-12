@@ -32,9 +32,8 @@ def get_details(product_url):
         product_details[2] = title_tag.string
 
         # Get product description
-        desc_title = soup.find("div", id="product_description")
-        desc_content = desc_title.find_next_sibling("p").string
-        product_details[6] = desc_content
+        meta_desc = soup.find("meta", {"name": "description"})
+        product_details[6] = meta_desc['content'].strip()
 
         # Get product category
         breadcrumb = soup.find("li", class_="active")
