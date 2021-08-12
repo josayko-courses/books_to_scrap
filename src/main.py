@@ -5,7 +5,7 @@ from progress.spinner import MoonSpinner
 
 
 books_urls = get_books_url(
-    "http://books.toscrape.com/catalogue/category/books/mystery_3/index.html")
+    "http://books.toscrape.com/catalogue/category/books/philosophy_7/index.html")
 
 # Create a csv file
 headers = [
@@ -26,13 +26,13 @@ writer = csv.writer(file_csv, delimiter=",")
 writer.writerow(headers)
 
 # with MoonSpinner('Processing...') as spinner:
-#     for url in books_urls:
-#         details = get_details(url)
-#         writer.writerow(details)
+for url in books_urls:
+    details = get_details(url)
+    writer.writerow(details)
 #         spinner.next()
 
 file_csv.close()
 
-categories = get_categories('http://books.toscrape.com')
+# categories = get_categories('http://books.toscrape.com')
 
-print(categories)
+# print(books_urls)
