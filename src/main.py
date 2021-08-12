@@ -1,5 +1,5 @@
 from bookstoscrap.book import get_details
-from bookstoscrap.category import get_books_url
+from bookstoscrap.category import get_categories, get_books_url
 import csv
 from progress.spinner import MoonSpinner
 
@@ -25,10 +25,14 @@ file_csv = open("data.csv", "w")
 writer = csv.writer(file_csv, delimiter=",")
 writer.writerow(headers)
 
-with MoonSpinner('Processing...') as spinner:
-    for url in books_urls:
-        details = get_details(url)
-        writer.writerow(details)
-        spinner.next()
+# with MoonSpinner('Processing...') as spinner:
+#     for url in books_urls:
+#         details = get_details(url)
+#         writer.writerow(details)
+#         spinner.next()
 
 file_csv.close()
+
+categories = get_categories('http://books.toscrape.com')
+
+print(categories)

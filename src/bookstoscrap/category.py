@@ -40,3 +40,18 @@ def get_books_url(page_url):
             print("Error: cannot get data from url")
             break
     return books_urls
+
+
+def get_categories(url):
+    categories = {}
+
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, "html.parser")
+    nav = soup.find("ul", class_="nav")
+    taglist = nav.find_all("a")
+
+    for tag in taglist:
+        for str in tag.stripped_strings:
+            categories[str] = urlcat(url, tag['href'])
+
+    return categories
