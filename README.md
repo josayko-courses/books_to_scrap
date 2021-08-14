@@ -22,5 +22,6 @@ $ pip install -r requirements.txt
 ## How to run the program
 
 ```shell
-$ python src/main.py
+$ python main.py [OPTIONS]
+OPTIONS: --all, --save-images, --book [URL], --category [CATEGORY]
 ```
