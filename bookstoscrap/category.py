@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from .urlcat import urlcat
+from bcolors.colors import Color
 
 
 def urlnext(base, chunk):
@@ -45,7 +46,13 @@ def get_books_url(page_url):
 def get_categories(url):
     categories = {}
 
-    response = requests.get(url)
+    print("> Fetching data from " + url)
+    try:
+        response = requests.get(url)
+    except:
+        print(Color.FAIL + "Error fetching data from url" + Color.ENDC)
+        return categories
+
     soup = BeautifulSoup(response.content, "html.parser")
     nav = soup.find("ul", class_="nav")
     taglist = nav.find_all("a")

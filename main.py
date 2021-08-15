@@ -6,7 +6,7 @@ import csv
 import sys
 
 
-def create_csv(category_url, category):
+def create_csv(books_urls, category):
     headers = [
         "product_page_url",
         "upc",
@@ -19,26 +19,25 @@ def create_csv(category_url, category):
         "review_rating",
         "image_url"
     ]
-
-    print("> Fetching data from " + category_url)
-    books_urls = get_books_url(category_url)
+    # Write description headers
     file_csv = open(category + ".csv", "w")
     writer = csv.writer(file_csv, delimiter=",")
     writer.writerow(headers)
 
+    # Get and write each book details
     with MoonSpinner('Processing...') as spinner:
         for url in books_urls:
             details = get_details(url)
             writer.writerow(details)
             spinner.next()
-    file_csv.close()
 
+    file_csv.close()
     print("[" + Color.OKGREEN + "OK" + Color.ENDC + "] " + category + ".csv")
 
 
-def fetch_data(url, filename):
+def fetch_data(books_urls, filename):
     try:
-        create_csv(url, filename)
+        create_csv(books_urls, filename)
         return True
     except:
         print(Color.FAIL + "Error fetching data from url" + Color.ENDC)
@@ -47,14 +46,16 @@ def fetch_data(url, filename):
 
 def main(argv):
     if len(argv) == 3 and argv[1] == "--book":
-        if fetch_data(argv[2], "book") == True:
+        book_url = [argv[2]]
+        if fetch_data(book_url, "book") == True:
             return
 
     elif len(argv) == 3 and argv[1] == "--category":
         categories = get_categories('http://books.toscrape.com')
         for category in categories:
             if category == argv[2].capitalize():
-                if fetch_data(categories[category], category) == True:
+                books_urls = get_books_url(categories[category])
+                if fetch_data(books_urls, category) == True:
                     return
         print(Color.FAIL + "Error: category doesn't exist" + Color.ENDC)
 
@@ -66,7 +67,8 @@ def main(argv):
         categories = get_categories('http://books.toscrape.com')
         for category in categories:
             if category != 'Books':
-                if fetch_data(categories[category], category) == False:
+                books_urls = get_books_url(categories[category])
+                if fetch_data(books_urls, category) == False:
                     return
         return
 
