@@ -36,23 +36,26 @@ def create_csv(category_url, category):
     print("[" + Color.OKGREEN + "OK" + Color.ENDC + "] " + category + ".csv")
 
 
+def fetch_data(url, filename):
+    try:
+        create_csv(url, filename)
+        return True
+    except:
+        print(Color.FAIL + "Error fetching data from url" + Color.ENDC)
+    return False
+
+
 def main(argv):
     if len(argv) == 3 and argv[1] == "--book":
-        try:
-            create_csv(argv[2], "book")
+        if fetch_data(argv[2], "book") == True:
             return
-        except:
-            print(Color.FAIL + "Error fetching data from url" + Color.ENDC)
 
     elif len(argv) == 3 and argv[1] == "--category":
         categories = get_categories('http://books.toscrape.com')
         for category in categories:
             if category == argv[2].capitalize():
-                try:
-                    create_csv(categories[category], category)
+                if fetch_data(categories[category], category) == True:
                     return
-                except:
-                    print(Color.FAIL + "Error fetching data from url" + Color.ENDC)
         print(Color.FAIL + "Error: category doesn't exist" + Color.ENDC)
 
     elif len(argv) == 2 and argv[1] == "--all":
@@ -63,10 +66,8 @@ def main(argv):
         categories = get_categories('http://books.toscrape.com')
         for category in categories:
             if category != 'Books':
-                try:
-                    create_csv(categories[category], category)
-                except:
-                    print(Color.FAIL + "Error fetching data from url" + Color.ENDC)
+                if fetch_data(categories[category], category) == False:
+                    return
         return
 
     else:
