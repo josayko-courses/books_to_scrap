@@ -1,6 +1,6 @@
 from bookstoscrap.category import get_categories, get_books_url
-from bcolors.colors import Color
 from bookstoscrap.csv import fetch_data
+from bcolors.colors import Color
 import sys
 
 
