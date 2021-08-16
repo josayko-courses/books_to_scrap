@@ -46,12 +46,11 @@ def get_books_url(page_url):
 def get_categories(url):
     categories = {}
 
-    print("> Fetching data from " + url)
     try:
         response = requests.get(url)
     except:
-        print(Color.FAIL + "Error fetching data from url" + Color.ENDC)
-        return categories
+        print(Color.FAIL + "Error: cannot fetch data from url" + Color.ENDC)
+        return None
 
     soup = BeautifulSoup(response.content, "html.parser")
     nav = soup.find("ul", class_="nav")

@@ -2,6 +2,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 from .urlcat import urlcat
+from bcolors.colors import Color
 
 
 def get_details(product_url):
@@ -77,6 +78,7 @@ def get_details(product_url):
                 number = re.findall(r'[\d\.\d+]', td.string)
                 product_details[5] = int(''.join(number))
     else:
-        print("Error: cannot get data from url")
+        print(Color.FAIL + "Error: cannot get data from url" + Color.ENDC)
+        return None
 
     return product_details

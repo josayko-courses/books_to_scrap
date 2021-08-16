@@ -23,5 +23,5 @@ $ pip install -r requirements.txt
 
 ```shell
 $ python main.py [OPTIONS]
-OPTIONS: --all, --save-images, --book [URL], --category [CATEGORY]
+OPTIONS: getall, --save-images, bookurl [URL], category [CATEGORY]
 ```
