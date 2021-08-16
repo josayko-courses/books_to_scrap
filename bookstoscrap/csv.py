@@ -5,7 +5,12 @@ from bcolors.colors import Color
 from bookstoscrap.book import get_details
 
 
-def create_csv(books_urls, category):
+def dl_image(image_url):
+    print("download image from: " + image_url)
+    return
+
+
+def create_csv(books_urls, category, image=False):
     headers = [
         "product_page_url",
         "upc",
@@ -34,16 +39,25 @@ def create_csv(books_urls, category):
             details = get_details(url)
             spinner.next()
             if details != None:
+                if image:
+                    dl_image(details[9])
                 writer.writerow(details)
 
     file_csv.close()
     print("[" + Color.OKGREEN + "OK" + Color.ENDC + "] " + category + ".csv")
 
 
-def fetch_data(books_urls, filename):
+def fetch_data(argv, books_urls, filename):
+
+    image = False
+    for option in argv:
+        if option == "--save-img":
+            image = True
+
     try:
-        create_csv(books_urls, filename)
+        create_csv(books_urls, filename, image)
         return True
     except:
         print(Color.FAIL + "Error: cannot fetch data from url" + Color.ENDC)
+
     return False

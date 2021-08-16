@@ -23,5 +23,11 @@ $ pip install -r requirements.txt
 
 ```shell
 $ python main.py [OPTIONS]
-OPTIONS: getall, --save-images, bookurl [URL], category [CATEGORY]
+OPTIONS: getall, --save-img, bookurl [URL], category [CATEGORY]
+```
+
+#### Get data from all categories and download the images
+
+```shell
+$ python main.py getall --save-img
 ```
