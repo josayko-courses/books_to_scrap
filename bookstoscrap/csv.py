@@ -1,12 +1,16 @@
 import csv
 import os
+import requests
 from progress.spinner import MoonSpinner
 from bcolors.colors import Color
 from bookstoscrap.book import get_details
 
 
 def dl_image(image_url):
-    print("download image from: " + image_url)
+    r = requests.get(image_url)
+    filename = image_url.rsplit('/', 1)[1]
+    with open('img/' + filename, 'wb') as image:
+        image.write(r.content)
     return
 
 
@@ -52,6 +56,9 @@ def fetch_data(argv, books_urls, filename):
     image = False
     for option in argv:
         if option == "--save-img":
+            path = os.getcwd()
+            if os.path.isdir(path + '/img') == False:
+                os.mkdir(path + '/img')
             image = True
 
     try:
