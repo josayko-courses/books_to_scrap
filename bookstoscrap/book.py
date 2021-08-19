@@ -1,15 +1,6 @@
-import requests
 import re
-from bs4 import BeautifulSoup
 from .fetch import Fetch
 from bcolors.colors import Color
-
-
-class Book:
-    details = {}
-
-    def __init__(self, url):
-        self.details['url'] = url
 
 
 def get_details(product_url):

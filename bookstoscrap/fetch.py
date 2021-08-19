@@ -3,8 +3,16 @@ import requests
 from bs4 import BeautifulSoup
 
 
-class Category:
+class Book:
+    def __init__(self, url):
+        self.details = {}
+        self.details['url'] = url
 
+    def __repr__(self):
+        return repr(self.details)
+
+
+class Category:
     def __init__(self, name, url):
         self.name = name
         self.url = url
@@ -33,33 +41,34 @@ class Fetch:
         return base
 
     @staticmethod
-    def urlnext(base, chunk):
-        next_url = ""
+    def next_page(base, chunk):
+        url = ""
         for str in base.split('/'):
             if ".html" not in str:
-                next_url += (str + '/')
-        next_url += chunk
-        return next_url
+                url += (str + '/')
+        url += chunk
+        return url
 
     @classmethod
-    def extract_urls(cls, soup):
-        urls = []
-        article_list = soup.find_all("article", class_="product_pod")
-        for article in article_list:
+    def books_from_page(cls, soup):
+        books = []
+        articles = soup.find_all("article", class_="product_pod")
+        for article in articles:
             href = article.find("h3").a['href']
-            url = cls.urlcat("http://books.toscrape.com/catalogue", href)
-            urls.append(url)
-        return urls
+            book = Book(cls.urlcat(
+                "http://books.toscrape.com/catalogue", href))
+            books.append(book)
+        return books
 
     @classmethod
-    def books(cls, url):
+    def books_from_category(cls, url):
         books = []
         while True:
             soup = cls.soup(url)
-            books += cls.extract_urls(soup)
+            books += cls.books_from_page(soup)
             li = soup.find('li', class_="next")
             if li is not None:
-                url = cls.urlnext(url, li.a['href'])
+                url = cls.next_page(url, li.a['href'])
             else:
                 break
         return books
@@ -75,7 +84,7 @@ class Fetch:
             for str in a.stripped_strings:
                 if str != 'Books':
                     category = Category(str, cls.urlcat(url, a['href']))
-                    category.books = cls.books(category.url)
+                    category.books = cls.books_from_category(category.url)
                     categories.append(category)
 
         return categories
