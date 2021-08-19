@@ -1,12 +1,58 @@
 import sys
 import requests
+import re
 from bs4 import BeautifulSoup
 
 
 class Book:
     def __init__(self, url):
+        soup = Fetch.soup(url)
         self.details = {}
+
+        # Get the product url
         self.details['url'] = url
+
+        # Get title
+        title_tag = soup.find("h1")
+        self.details['title'] = title_tag.string
+
+        # Get product description
+        meta_desc = soup.find("meta", {"name": "description"})
+        self.details['product_description'] = meta_desc['content'].strip()
+
+        # Get product category
+        breadcrumb = soup.find("li", class_="active")
+        link = breadcrumb.find_previous_sibling("li")
+        category = link.find("a").string
+        self.details['category'] = category
+
+        # Get review rating
+        p = soup.find("p", class_="star-rating")
+        ratings = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five']
+        for index, rating in enumerate(ratings):
+            if rating == p['class'][1]:
+                self.details['review_rating'] = ratings[index]
+
+        # Get the image url
+        img_tag = soup.find("img", alt=self.details['title'])
+        link_str = img_tag['src']
+        link_url = Fetch.urlcat("http://books.toscrape.com", link_str)
+        self.details['image_url'] = link_url
+
+        # Get upc, prices and availability
+        tds = soup.find_all("td")
+        for index, td in enumerate(tds):
+            if (index == 0):
+                self.details['upc'] = td.string
+            elif (index == 2):
+                number = re.findall(r'[\d\.\d+]', td.string)
+                self.details['price_including_tax'] = float(''.join(number))
+            elif (index == 3):
+                number = re.findall(r'[\d\.\d+]', td.string)
+                self.details['price_excluding_tax'] = float(''.join(number))
+            elif (index == 5):
+                number = re.findall(r'[\d\.\d+]', td.string)
+                self.details['number_available'] = int(''.join(number))
 
     def __repr__(self):
         return repr(self.details)
@@ -61,8 +107,10 @@ class Fetch:
         return books
 
     @classmethod
-    def books_from_category(cls, url):
+    def books_from_category(cls, name, url):
         books = []
+
+        print(f'Processing {name} books...')
         while True:
             soup = cls.soup(url)
             books += cls.books_from_page(soup)
@@ -84,7 +132,9 @@ class Fetch:
             for str in a.stripped_strings:
                 if str != 'Books':
                     category = Category(str, cls.urlcat(url, a['href']))
-                    category.books = cls.books_from_category(category.url)
+                    category.books = cls.books_from_category(
+                        category.name, category.url)
                     categories.append(category)
+                    print(f'    [OK] {category.name}')
 
         return categories

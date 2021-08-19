@@ -14,7 +14,8 @@ def main(argv):
     elif len(argv) >= 3 and argv[1] == "category":
         categories = Fetch.categories('http://books.toscrape.com')
         for category in categories:
-            print(category.books[0])
+            if (category.name == argv[2].capitalize()):
+                print(category.name)
         return
         # if categories == None:
         #     return
