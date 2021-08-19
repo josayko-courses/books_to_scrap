@@ -7,8 +7,8 @@
       "request": "launch",
       "program": "${file}",
       "args": [
-        "--book",
-        "http://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html"
+        "category",
+        "Travel"
       ],
       "console": "integratedTerminal"
     }

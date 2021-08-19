@@ -1,7 +1,7 @@
 import requests
 import re
 from bs4 import BeautifulSoup
-from .fetch import urlcat, Fetch
+from .fetch import Fetch
 from bcolors.colors import Color
 
 
@@ -30,7 +30,7 @@ def get_details(product_url):
     product_details = [''] * 10
     soup = Fetch.soup(product_url)
 
-    if (soup):
+    if soup:
         # Get the product url
         product_details[0] = product_url
 
@@ -66,7 +66,7 @@ def get_details(product_url):
         # Get the image url
         img_tag = soup.find("img", alt=product_details[2])
         link_str = img_tag['src']
-        link_url = urlcat("http://books.toscrape.com", link_str)
+        link_url = Fetch.urlcat("http://books.toscrape.com", link_str)
         product_details[9] = link_url
 
         # Get upc, prices and availability
