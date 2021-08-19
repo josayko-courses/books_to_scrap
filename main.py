@@ -13,6 +13,8 @@ def main(argv):
 
     elif len(argv) >= 3 and argv[1] == "category":
         categories = Fetch.categories('http://books.toscrape.com')
+        for category in categories:
+            print(category.books[0])
         return
         # if categories == None:
         #     return
