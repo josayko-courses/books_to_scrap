@@ -1,9 +1,8 @@
+from bcolors.colors import Color
 import csv
 import os
 import requests
-from progress.spinner import MoonSpinner
-from bcolors.colors import Color
-from bookstoscrap.book import get_details
+
 
 def dl_image(image_url):
     r = requests.get(image_url)
@@ -37,14 +36,12 @@ def create_csv(books_urls, category, image=False):
     writer.writerow(headers)
 
     # Get and write each book details
-    with MoonSpinner('Processing...') as spinner:
-        for url in books_urls:
-            details = get_details(url)
-            spinner.next()
-            if details != None:
-                if image:
-                    dl_image(details[9])
-                writer.writerow(details)
+    # for url in books_urls:
+    # details = get_details(url)
+    # if details != None:
+    #     if image:
+    #         dl_image(details[9])
+    #     writer.writerow(details)
 
     file_csv.close()
     print("[" + Color.OKGREEN + "OK" + Color.ENDC + "] " + category + ".csv")

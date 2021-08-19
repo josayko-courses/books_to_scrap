@@ -1,7 +1,8 @@
-import sys
-import requests
-import re
+from bcolors.colors import Color
 from bs4 import BeautifulSoup
+import requests
+import sys
+import re
 
 
 class Book:
@@ -74,7 +75,7 @@ class Fetch:
         try:
             response = requests.get(url)
         except:
-            print("Error: Fetch.soup(url)")
+            print(f'{Color.WARNING}Error: Fetch.soup(url){Color.ENDC}')
             sys.exit(1)
         soup = BeautifulSoup(response.content, "html.parser")
         return soup
@@ -122,7 +123,7 @@ class Fetch:
         return books
 
     @classmethod
-    def categories(cls, url):
+    def categories(cls, url, filter=None):
         categories = []
         soup = cls.soup(url)
         nav = soup.find("ul", class_="nav")
@@ -131,10 +132,11 @@ class Fetch:
         for a in elements:
             for str in a.stripped_strings:
                 if str != 'Books':
-                    category = Category(str, cls.urlcat(url, a['href']))
-                    category.books = cls.books_from_category(
-                        category.name, category.url)
-                    categories.append(category)
-                    print(f'    [OK] {category.name}')
+                    if (filter and filter == str) or filter == None:
+                        category = Category(str, cls.urlcat(url, a['href']))
+                        category.books = cls.books_from_category(
+                            category.name, category.url)
+                        categories.append(category)
+                        print(f'    [OK] {category.name}')
 
         return categories
