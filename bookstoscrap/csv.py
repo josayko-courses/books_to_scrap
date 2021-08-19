@@ -5,7 +5,6 @@ from progress.spinner import MoonSpinner
 from bcolors.colors import Color
 from bookstoscrap.book import get_details
 
-
 def dl_image(image_url):
     r = requests.get(image_url)
     filename = image_url.rsplit('/', 1)[1]

@@ -1,8 +1,15 @@
 import requests
 import re
 from bs4 import BeautifulSoup
-from .urlcat import urlcat
+from .fetch import urlcat, Fetch
 from bcolors.colors import Color
+
+
+class Book:
+    details = {}
+
+    def __init__(self, url):
+        self.details['url'] = url
 
 
 def get_details(product_url):
@@ -20,11 +27,10 @@ def get_details(product_url):
     [8]review_rating\n
     [9]image_url\n
     """
-    response = requests.get(product_url)
     product_details = [''] * 10
-    if (response.ok):
-        soup = BeautifulSoup(response.content, "html.parser")
+    soup = Fetch.soup(product_url)
 
+    if (soup):
         # Get the product url
         product_details[0] = product_url
 
