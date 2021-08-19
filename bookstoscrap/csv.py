@@ -1,7 +1,7 @@
 from bcolors.colors import Color
+import requests
 import csv
 import os
-import requests
 
 
 def dl_image(image_url):
@@ -12,55 +12,32 @@ def dl_image(image_url):
     return
 
 
-def create_csv(books_urls, category, image=False):
-    headers = [
-        "product_page_url",
-        "upc",
-        "title",
-        "price_including_tax",
-        "price_excluding_tax",
-        "number_available",
-        "product_description",
-        "category",
-        "review_rating",
-        "image_url"
-    ]
-
-    path = os.getcwd()
-    if os.path.isdir(path + '/data') == False:
-        os.mkdir(path + '/data')
-
-        # Write description headers
-    file_csv = open('data/' + category + ".csv", "w")
-    writer = csv.writer(file_csv, delimiter=",")
-    writer.writerow(headers)
-
-    # Get and write each book details
-    # for url in books_urls:
-    # details = get_details(url)
-    # if details != None:
-    #     if image:
-    #         dl_image(details[9])
-    #     writer.writerow(details)
-
-    file_csv.close()
-    print("[" + Color.OKGREEN + "OK" + Color.ENDC + "] " + category + ".csv")
-
-
-def fetch_data(argv, books_urls, filename):
-
-    image = False
+def save_data(data, argv):
     for option in argv:
         if option == "--save-img":
             path = os.getcwd()
             if os.path.isdir(path + '/img') == False:
                 os.mkdir(path + '/img')
-            image = True
+            for category in data:
+                for book in category.books:
+                    dl_image(book.details['image_url'])
+            print(
+                f'    [{Color.OKGREEN}OK{Color.ENDC}] images saved')
 
-    try:
-        create_csv(books_urls, filename, image)
-        return True
-    except:
-        print(Color.FAIL + "Error: cannot fetch data from url" + Color.ENDC)
+    path = os.getcwd()
+    if os.path.isdir(path + '/data') == False:
+        os.mkdir(path + '/data')
 
-    return False
+    headers = list(data[0].books[0].details.keys())
+    for category in data:
+        file_csv = open('data/' + category.name + ".csv", "w")
+        writer = csv.writer(file_csv, delimiter=",")
+        writer.writerow(headers)
+
+        for book in category.books:
+            values = list(book.details.values())
+            writer.writerow(values)
+
+        file_csv.close()
+        print(
+            f'    [{Color.OKGREEN}OK{Color.ENDC}] {category.name}.csv created')

@@ -32,7 +32,7 @@ class Book:
         ratings = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five']
         for index, rating in enumerate(ratings):
             if rating == p['class'][1]:
-                self.details['review_rating'] = ratings[index]
+                self.details['review_rating'] = index
 
         # Get the image url
         img_tag = soup.find("img", alt=self.details['title'])
@@ -137,6 +137,7 @@ class Fetch:
                         category.books = cls.books_from_category(
                             category.name, category.url)
                         categories.append(category)
-                        print(f'    [OK] {category.name}')
+                        print(
+                            f'    [{Color.OKGREEN}OK{Color.ENDC}] {category.name} books details')
 
         return categories
