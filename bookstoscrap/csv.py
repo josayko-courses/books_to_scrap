@@ -18,19 +18,21 @@ def save_data(data, argv):
             path = os.getcwd()
             if os.path.isdir(path + '/img') == False:
                 os.mkdir(path + '/img')
+            print(f'Downloading images...')
             for category in data:
                 for book in category.books:
                     dl_image(book.details['image_url'])
             print(
-                f'    [{Color.OKGREEN}OK{Color.ENDC}] images saved')
+                f'    [{Color.OKGREEN}OK{Color.ENDC}] images')
 
     path = os.getcwd()
-    if os.path.isdir(path + '/data') == False:
-        os.mkdir(path + '/data')
+    if os.path.isdir(path + '/csv') == False:
+        os.mkdir(path + '/csv')
 
     headers = list(data[0].books[0].details.keys())
+    print(f'Creating csv files...')
     for category in data:
-        file_csv = open('data/' + category.name + ".csv", "w")
+        file_csv = open('csv/' + category.name + ".csv", "w")
         writer = csv.writer(file_csv, delimiter=",")
         writer.writerow(headers)
 
