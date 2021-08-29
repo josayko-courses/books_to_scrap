@@ -1,3 +1,10 @@
+"""Extract and transform data from url 
+
+Fetch methods extracts urls and create a Category.
+Each instance of Book tranform data from book url.
+Book instances are stored in respective Category.
+"""
+
 from bcolors.colors import Color
 from bs4 import BeautifulSoup
 import requests

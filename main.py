@@ -1,3 +1,8 @@
+"""CLI program for web scrapping
+
+Get books data from http://books.toscrape.com
+"""
+
 from bookstoscrap.csv import save_data
 from bookstoscrap.fetch import Fetch, Category, Book
 from bcolors.colors import Color

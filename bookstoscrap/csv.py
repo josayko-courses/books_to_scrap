@@ -1,3 +1,9 @@
+"""Load data in a csv file.
+
+Load data from Book in each Category.
+Optionnally, download book images from image url before.
+"""
+
 from bcolors.colors import Color
 import requests
 import csv
