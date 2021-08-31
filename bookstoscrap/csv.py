@@ -11,6 +11,7 @@ import os
 
 
 def dl_image(image_url):
+    """Create an image file from url"""
     r = requests.get(image_url)
     filename = image_url.rsplit('/', 1)[1]
     with open('img/' + filename, 'wb') as image:
@@ -19,6 +20,7 @@ def dl_image(image_url):
 
 
 def save_data(data, argv):
+    """Create csv files from data"""
     for option in argv:
         if option == "--save-img":
             path = os.getcwd()

@@ -13,6 +13,7 @@ import re
 
 
 class Book:
+    """Create a Book to store details from url"""
     def __init__(self, url):
         soup = Fetch.soup(url)
         self.details = {}
@@ -67,6 +68,7 @@ class Book:
 
 
 class Category:
+    """Create a category to store a list of Book"""
     def __init__(self, name, url):
         self.name = name
         self.url = url
@@ -77,8 +79,10 @@ class Category:
 
 
 class Fetch:
+    """Useful methods for fetching data from url"""
     @staticmethod
     def soup(url):
+        """Returns html code source as a BeautifulSoup instance"""
         try:
             response = requests.get(url)
         except:
@@ -89,6 +93,7 @@ class Fetch:
 
     @staticmethod
     def urlcat(base, chunk):
+        """Concatenate base and relatvive url to get absolut url"""
         for str in chunk.split('/'):
             if str != "..":
                 base += ('/' + str)
@@ -96,6 +101,7 @@ class Fetch:
 
     @staticmethod
     def next_page(base, chunk):
+        """Returns next pasge url or empty string"""
         url = ""
         for str in base.split('/'):
             if ".html" not in str:
@@ -105,6 +111,7 @@ class Fetch:
 
     @classmethod
     def books_from_page(cls, soup):
+        """Extract all books url from page"""
         books = []
         articles = soup.find_all("article", class_="product_pod")
         for article in articles:
@@ -116,6 +123,7 @@ class Fetch:
 
     @classmethod
     def books_from_category(cls, name, url):
+        """Create Book instance for each book url"""
         books = []
 
         print(f'Processing {name} books...')
@@ -131,6 +139,7 @@ class Fetch:
 
     @classmethod
     def categories(cls, url, filter=None):
+        """Extract categories url and returns a list of Category"""
         categories = []
         soup = cls.soup(url)
         nav = soup.find("ul", class_="nav")

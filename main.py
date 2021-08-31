@@ -10,6 +10,7 @@ import sys
 
 
 def main(argv):
+    """Main program with 3 options: getall, bookurl and category"""
 
     if len(argv) >= 3 and argv[1] == "bookurl":
         book = list([Book(argv[2])])
